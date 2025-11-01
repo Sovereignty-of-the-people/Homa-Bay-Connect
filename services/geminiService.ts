@@ -1,8 +1,8 @@
 import { GoogleGenAI, Type, Chat } from "@google/genai";
 import type { ProjectIdea, AIAnalysisResult } from '../types';
 
-// Fix: Per coding guidelines, initialize directly with process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Fix: Per coding guidelines, initialize directly with import.meta.env.VITE_GEMINI_API_KEY
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 const analysisSchema = {
   type: Type.OBJECT,
@@ -58,8 +58,8 @@ const analysisSchema = {
 
 
 export const analyzeSubmissions = async (submissions: ProjectIdea[]): Promise<AIAnalysisResult> => {
-  // Fix: Per coding guidelines, check process.env.API_KEY
-  if (!process.env.API_KEY) {
+  // Fix: Per coding guidelines, check import.meta.env.VITE_GEMINI_API_KEY
+  if (!import.meta.env.VITE_GEMINI_API_KEY) {
     // Return mock data if API key is not available
     return {
       topPriorities: [
@@ -128,8 +128,8 @@ export const getConciergeResponse = async (newIdea: ProjectIdea, allIdeas: Proje
         return newTitleWords.some(word => titleWords.has(word) && word.length > 3);
     }).length;
 
-    // Fix: Per coding guidelines, check process.env.API_KEY
-    if (!process.env.API_KEY) {
+    // Fix: Per coding guidelines, check import.meta.env.VITE_GEMINI_API_KEY
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
       // Return mock response
        return `Thank you for your submission about "${newIdea.title}". We've received it and our team will review it. We found ${similarIdeas} other similar submission(s) from your fellow citizens. This helps us understand the priorities of the community. You can track the overall community priorities on the main dashboard.`;
     }
@@ -167,7 +167,7 @@ export const getConciergeResponse = async (newIdea: ProjectIdea, allIdeas: Proje
 };
 
 export const enhanceDescription = async (description: string): Promise<string> => {
-  if (!process.env.API_KEY) {
+  if (!import.meta.env.VITE_GEMINI_API_KEY) {
     return `${description}\n\n[AI-ENHANCED CONTENT: This is a placeholder as the API key is not configured. The AI would normally expand on the benefits, scope, and potential impact of this project for the community.]`;
   }
 
@@ -201,7 +201,7 @@ export const getChatResponse = async (
     newMessage: string,
     groundingContext: string | null
 ): Promise<string> => {
-  if (!process.env.API_KEY) {
+  if (!import.meta.env.VITE_GEMINI_API_KEY) {
     if (groundingContext) {
       return "I am ready to answer questions about the selected document, but the AI is in demo mode (API key not configured).";
     }
